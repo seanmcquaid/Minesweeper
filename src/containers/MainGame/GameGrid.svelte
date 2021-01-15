@@ -1,13 +1,26 @@
 <script>
+  import { onMount } from 'svelte';
+
   import grid from './grid';
   let gameGrid = grid;
   let totalBombs = 8;
   let spacesLeft = gameGrid.flat().length - totalBombs;
-  $: {
-    for (let i = 0; i < totalBombs; i++) {
-      // choose 8 random spaces for bombs
+  onMount(() => {
+    let totalBombSpaces = 0;
+
+    while (totalBombSpaces !== totalBombs) {
+      const flattenedGameGrid = gameGrid.flat();
+      const randomSpaceIndex = Math.floor(
+        Math.random() * flattenedGameGrid.length
+      );
+
+      if (!flattenedGameGrid[randomSpaceIndex].hasBomb) {
+        flattenedGameGrid[randomSpaceIndex].hasBomb = true;
+        totalBombSpaces++;
+      }
+      gameGrid = gameGrid;
     }
-  }
+  });
 
   function gridSpaceOnClick(gridSpaceInfo) {
     gridSpaceInfo.isSelected = true;
@@ -23,7 +36,7 @@
           class:selected={gridSpace.isSelected}
           on:click={() => gridSpaceOnClick(gridSpace)}
         >
-          {gridSpace.isSelected}
+          {gridSpace.hasBomb}
         </li>
       {/each}
     </ol>
