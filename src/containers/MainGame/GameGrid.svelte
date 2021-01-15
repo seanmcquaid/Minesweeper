@@ -4,7 +4,7 @@
   import grid from './grid';
   let gameGrid = grid;
   let totalBombs = 8;
-  let spacesLeft = gameGrid.flat().length - totalBombs;
+  let spacesLeft = 0;
   onMount(() => {
     let totalBombSpaces = 0;
 
@@ -18,15 +18,24 @@
         flattenedGameGrid[randomSpaceIndex].hasBomb = true;
         totalBombSpaces++;
       }
-      gameGrid = gameGrid;
     }
+
+    // calculate total spaces for each NON bomb space
+
+    gameGrid = gameGrid;
   });
 
   function gridSpaceOnClick(gridSpaceInfo) {
     gridSpaceInfo.isSelected = true;
     gameGrid = gameGrid;
   }
+
+  $: spacesLeft =
+    gameGrid.flat().filter((gridSpace) => !gridSpace.isSelected).length -
+    totalBombs;
 </script>
+
+<p>{spacesLeft}</p>
 
 <ol class="gameGrid">
   {#each gameGrid as row, i}
