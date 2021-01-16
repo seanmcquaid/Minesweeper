@@ -2,11 +2,13 @@
   import { onMount } from 'svelte';
 
   import grid from './grid';
-  let gameGrid = grid;
+  let gameGrid = [...grid];
   let totalBombs = 8;
   let spacesLeft = 0;
   onMount(() => {
     let totalBombSpaces = 0;
+    const bombSpaceIds = [];
+    const bombSpacesCoordinates = [];
 
     while (totalBombSpaces !== totalBombs) {
       const flattenedGameGrid = gameGrid.flat();
@@ -16,11 +18,10 @@
 
       if (!flattenedGameGrid[randomSpaceIndex].hasBomb) {
         flattenedGameGrid[randomSpaceIndex].hasBomb = true;
+        bombSpaceIds.push(flattenedGameGrid[randomSpaceIndex].id);
         totalBombSpaces++;
       }
     }
-
-    // calculate total spaces for each NON bomb space
 
     gameGrid = gameGrid;
   });
@@ -45,7 +46,7 @@
           class:selected={gridSpace.isSelected}
           on:click={() => gridSpaceOnClick(gridSpace)}
         >
-          {gridSpace.hasBomb}
+          {gridSpace.hasBomb ? 'bomb' : gridSpace.spacesNearBomb}
         </li>
       {/each}
     </ol>
@@ -59,14 +60,19 @@
   }
   .gridRow {
     display: flex;
-    padding: 1rem;
     list-style: none;
   }
   li {
     padding: 1rem;
+    margin: 0.15rem;
+    background-color: black;
+    color: black;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .selected {
-    color: blue;
-    background-color: red;
+    color: white;
   }
 </style>
