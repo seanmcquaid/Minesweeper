@@ -1,17 +1,17 @@
 <script>
   import { onMount } from 'svelte';
-
   import grid from './grid';
+
   let gameGrid = [...grid];
   let totalBombs = 8;
   let spacesLeft = 0;
+
   onMount(() => {
     let totalBombSpaces = 0;
     const bombSpaceIds = [];
-    const bombSpacesCoordinates = [];
+    const flattenedGameGrid = gameGrid.flat();
 
     while (totalBombSpaces !== totalBombs) {
-      const flattenedGameGrid = gameGrid.flat();
       const randomSpaceIndex = Math.floor(
         Math.random() * flattenedGameGrid.length
       );
@@ -20,6 +20,80 @@
         flattenedGameGrid[randomSpaceIndex].hasBomb = true;
         bombSpaceIds.push(flattenedGameGrid[randomSpaceIndex].id);
         totalBombSpaces++;
+      }
+    }
+
+    const rows = [
+      {
+        rowName: 'A',
+        rowIndex: 0,
+      },
+      {
+        rowName: 'B',
+        rowIndex: 1,
+      },
+      {
+        rowName: 'C',
+        rowIndex: 2,
+      },
+      {
+        rowName: 'D',
+        rowIndex: 3,
+      },
+      {
+        rowName: 'E',
+        rowIndex: 4,
+      },
+      {
+        rowName: 'F',
+        rowIndex: 5,
+      },
+      {
+        rowName: 'G',
+        rowIndex: 6,
+      },
+      {
+        rowName: 'H',
+        rowIndex: 7,
+      },
+    ];
+
+    for (let i = 0; i < bombSpaceIds.length; i++) {
+      const rowIndex = rows.find((row) =>
+        bombSpaceIds[i].contains(row.rowName)
+      );
+      const columnIndex = Number.parseInt(bombSpaceIds[i].split(/\d+/));
+      //up
+      if (x > 0) {
+        el.push(data[x - 1][y]);
+      }
+      //down
+      if (x < this.props.height - 1) {
+        el.push(data[x + 1][y]);
+      }
+      //left
+      if (y > 0) {
+        el.push(data[x][y - 1]);
+      }
+      //right
+      if (y < this.props.width - 1) {
+        el.push(data[x][y + 1]);
+      }
+      // top left
+      if (x > 0 && y > 0) {
+        el.push(data[x - 1][y - 1]);
+      }
+      // top right
+      if (x > 0 && y < this.props.width - 1) {
+        el.push(data[x - 1][y + 1]);
+      }
+      // bottom right
+      if (x < this.props.height - 1 && y < this.props.width - 1) {
+        el.push(data[x + 1][y + 1]);
+      }
+      // bottom left
+      if (x < this.props.height - 1 && y > 0) {
+        el.push(data[x + 1][y - 1]);
       }
     }
 

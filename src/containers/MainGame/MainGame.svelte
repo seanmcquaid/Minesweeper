@@ -1,19 +1,19 @@
 <script>
   import GameGrid from './GameGrid.svelte';
 
-  let startGame = false;
+  let isGameStarted = false;
 
-  function startGameOnClick() {
-    startGame = true;
+  function startGameButtonOnClick() {
+    isGameStarted = true;
   }
 </script>
 
 <main>
-  <h1>Start</h1>
-  {#if startGame}
+  <h1>Minesweeper</h1>
+  {#if isGameStarted}
     <GameGrid />
   {:else}
-    <button on:click={startGameOnClick}>Start</button>
+    <button on:click={startGameButtonOnClick}>Start</button>
   {/if}
 </main>
 
