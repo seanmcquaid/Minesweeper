@@ -76,6 +76,7 @@
           spacesNearBomb: 1,
         };
       }
+
       //below
       if (rowIndex < 7) {
         gameGrid[rowIndex + 1][columnIndex] = {
@@ -83,14 +84,23 @@
           spacesNearBomb: 1,
         };
       }
-      // //left
-      // if (y > 0) {
-      //   el.push(data[x][y - 1]);
-      // }
-      // //right
-      // if (y < this.props.width - 1) {
-      //   el.push(data[x][y + 1]);
-      // }
+
+      //left
+      if (columnIndex > 0) {
+        gameGrid[rowIndex][columnIndex - 1] = {
+          ...gameGrid[rowIndex][columnIndex - 1],
+          spacesNearBomb: 1,
+        };
+      }
+
+      //right
+      if (columnIndex < 7) {
+        gameGrid[rowIndex][columnIndex + 1] = {
+          ...gameGrid[rowIndex][columnIndex + 1],
+          spacesNearBomb: 1,
+        };
+      }
+
       // // top left
       // if (x > 0 && y > 0) {
       //   el.push(data[x - 1][y - 1]);
