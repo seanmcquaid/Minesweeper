@@ -101,22 +101,37 @@
         };
       }
 
-      // // top left
-      // if (x > 0 && y > 0) {
-      //   el.push(data[x - 1][y - 1]);
-      // }
-      // // top right
-      // if (x > 0 && y < this.props.width - 1) {
-      //   el.push(data[x - 1][y + 1]);
-      // }
+      // top left
+      if (rowIndex > 0 && columnIndex > 0) {
+        gameGrid[rowIndex - 1][columnIndex - 1] = {
+          ...gameGrid[rowIndex - 1][columnIndex - 1],
+          spacesNearBomb: 1,
+        };
+      }
+
+      // top right
+      if (rowIndex > 0 && columnIndex < 7) {
+        gameGrid[rowIndex - 1][columnIndex + 1] = {
+          ...gameGrid[rowIndex - 1][columnIndex + 1],
+          spacesNearBomb: 1,
+        };
+      }
+
       // // bottom right
-      // if (x < this.props.height - 1 && y < this.props.width - 1) {
-      //   el.push(data[x + 1][y + 1]);
-      // }
-      // // bottom left
-      // if (x < this.props.height - 1 && y > 0) {
-      //   el.push(data[x + 1][y - 1]);
-      // }
+      if (rowIndex < 7 && columnIndex < 7) {
+        gameGrid[rowIndex + 1][columnIndex + 1] = {
+          ...gameGrid[rowIndex + 1][columnIndex + 1],
+          spacesNearBomb: 1,
+        };
+      }
+
+      // bottom left
+      if (rowIndex < 7 && columnIndex > 0) {
+        gameGrid[rowIndex + 1][columnIndex - 1] = {
+          ...gameGrid[rowIndex + 1][columnIndex - 1],
+          spacesNearBomb: 1,
+        };
+      }
     }
 
     gameGrid = gameGrid;
