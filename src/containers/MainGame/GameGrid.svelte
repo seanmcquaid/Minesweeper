@@ -5,6 +5,7 @@
   let gameGrid = [...grid];
   let totalBombs = 8;
   let spacesLeft = 0;
+  let isGameOver = false;
 
   onMount(() => {
     const bombSpaceIds = [];
@@ -60,8 +61,6 @@
         .rowIndex;
       const columnIndex =
         Number.parseInt(bombSpaceIds[i].replace(/^\D+/g, '')) - 1;
-      console.log(rowIndex, columnIndex, bombSpaceIds[i]);
-      console.log(gameGrid[rowIndex][columnIndex - 1]);
 
       // set the bomb
       gameGrid[rowIndex][columnIndex] = {
@@ -145,9 +144,14 @@
   $: spacesLeft =
     gameGrid.flat().filter((gridSpace) => !gridSpace.isSelected).length -
     totalBombs;
+  $: isGameOver =
+    gameGrid
+      .flat()
+      .filter((gridSpace) => gridSpace.isSelected && gridSpace.hasBomb).length >
+    0;
 </script>
 
-<p>{spacesLeft}</p>
+<p>{isGameOver ? 'GAME OVER' : `${spacesLeft} empty spaces left`}</p>
 
 <ol class="gameGrid">
   {#each gameGrid as row, i}
@@ -168,15 +172,19 @@
   .gameGrid {
     height: 100%;
     list-style: none;
+    margin: 0;
+    padding: 0;
   }
   .gridRow {
     display: flex;
     list-style: none;
+    margin: 0;
+    padding: 0;
   }
   li {
     padding: 1rem;
     margin: 0.15rem;
-    /* background-color: black; */
+    background-color: black;
     color: black;
     width: 30px;
     display: flex;
