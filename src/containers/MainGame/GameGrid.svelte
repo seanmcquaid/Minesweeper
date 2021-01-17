@@ -7,19 +7,16 @@
   let spacesLeft = 0;
 
   onMount(() => {
-    let totalBombSpaces = 0;
     const bombSpaceIds = [];
     const flattenedGameGrid = gameGrid.flat();
 
-    while (totalBombSpaces !== totalBombs) {
+    while (bombSpaceIds.length !== totalBombs) {
       const randomSpaceIndex = Math.floor(
         Math.random() * flattenedGameGrid.length
       );
 
-      if (!flattenedGameGrid[randomSpaceIndex].hasBomb) {
-        flattenedGameGrid[randomSpaceIndex].hasBomb = true;
+      if (!bombSpaceIds.includes(flattenedGameGrid[randomSpaceIndex].id)) {
         bombSpaceIds.push(flattenedGameGrid[randomSpaceIndex].id);
-        totalBombSpaces++;
       }
     }
 
@@ -59,42 +56,57 @@
     ];
 
     for (let i = 0; i < bombSpaceIds.length; i++) {
-      const rowIndex = rows.find((row) =>
-        bombSpaceIds[i].contains(row.rowName)
-      );
-      const columnIndex = Number.parseInt(bombSpaceIds[i].split(/\d+/));
-      //up
-      if (x > 0) {
-        el.push(data[x - 1][y]);
+      const rowIndex = rows.find((row) => bombSpaceIds[i].includes(row.rowName))
+        .rowIndex;
+      const columnIndex =
+        Number.parseInt(bombSpaceIds[i].replace(/^\D+/g, '')) - 1;
+      console.log(rowIndex, columnIndex, bombSpaceIds[i]);
+      console.log(gameGrid[rowIndex][columnIndex - 1]);
+
+      // set the bomb
+      gameGrid[rowIndex][columnIndex] = {
+        ...gameGrid[rowIndex][columnIndex],
+        hasBomb: true,
+      };
+
+      //above
+      if (rowIndex > 0) {
+        gameGrid[rowIndex - 1][columnIndex] = {
+          ...gameGrid[rowIndex - 1][columnIndex],
+          spacesNearBomb: 1,
+        };
       }
-      //down
-      if (x < this.props.height - 1) {
-        el.push(data[x + 1][y]);
+      //below
+      if (rowIndex < 7) {
+        gameGrid[rowIndex + 1][columnIndex] = {
+          ...gameGrid[rowIndex + 1][columnIndex],
+          spacesNearBomb: 1,
+        };
       }
-      //left
-      if (y > 0) {
-        el.push(data[x][y - 1]);
-      }
-      //right
-      if (y < this.props.width - 1) {
-        el.push(data[x][y + 1]);
-      }
-      // top left
-      if (x > 0 && y > 0) {
-        el.push(data[x - 1][y - 1]);
-      }
-      // top right
-      if (x > 0 && y < this.props.width - 1) {
-        el.push(data[x - 1][y + 1]);
-      }
-      // bottom right
-      if (x < this.props.height - 1 && y < this.props.width - 1) {
-        el.push(data[x + 1][y + 1]);
-      }
-      // bottom left
-      if (x < this.props.height - 1 && y > 0) {
-        el.push(data[x + 1][y - 1]);
-      }
+      // //left
+      // if (y > 0) {
+      //   el.push(data[x][y - 1]);
+      // }
+      // //right
+      // if (y < this.props.width - 1) {
+      //   el.push(data[x][y + 1]);
+      // }
+      // // top left
+      // if (x > 0 && y > 0) {
+      //   el.push(data[x - 1][y - 1]);
+      // }
+      // // top right
+      // if (x > 0 && y < this.props.width - 1) {
+      //   el.push(data[x - 1][y + 1]);
+      // }
+      // // bottom right
+      // if (x < this.props.height - 1 && y < this.props.width - 1) {
+      //   el.push(data[x + 1][y + 1]);
+      // }
+      // // bottom left
+      // if (x < this.props.height - 1 && y > 0) {
+      //   el.push(data[x + 1][y - 1]);
+      // }
     }
 
     gameGrid = gameGrid;
@@ -139,7 +151,7 @@
   li {
     padding: 1rem;
     margin: 0.15rem;
-    background-color: black;
+    /* background-color: black; */
     color: black;
     width: 30px;
     display: flex;
